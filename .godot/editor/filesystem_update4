@@ -1,0 +1,3 @@
+res://scenes/main.tscn
+res://scenes/isometric_board.tscn
+res://scripts/isometric_board.gd

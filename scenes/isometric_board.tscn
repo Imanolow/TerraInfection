@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3s1gj45q5yq6"]
+
+[ext_resource type="Script" uid="uid://b4ogx3ufftv17" path="res://scripts/isometric_board.gd" id="1_2s1px"]
+
+[node name="IsometricBoard" type="Node2D"]
+script = ExtResource("1_2s1px")

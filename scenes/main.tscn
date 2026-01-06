@@ -1,0 +1,292 @@
+[gd_scene load_steps=2 format=3 uid="uid://bd3n2v7bh0rku"]
+
+[ext_resource type="Script" uid="uid://b63htb57k0lek" path="res://scripts/main.gd" id="1_q5q7x"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q5q7x")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0588235, 0.0588235, 0.137255, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1266.0
+offset_top = 5.0
+offset_right = -866.0
+offset_bottom = 45.0
+grow_horizontal = 0
+text = "TERRA INFECTION"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameContainer" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 40.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="BoardContainer" type="Panel" parent="GameContainer"]
+custom_minimum_size = Vector2(720, 660)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Controls" type="HBoxContainer" parent="GameContainer/BoardContainer"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -480.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 60.0
+grow_horizontal = 0
+
+[node name="ModeBtn" type="Button" parent="GameContainer/BoardContainer/Controls"]
+layout_mode = 2
+text = "Modo Editor"
+
+[node name="NewGameBtn" type="Button" parent="GameContainer/BoardContainer/Controls"]
+visible = false
+layout_mode = 2
+text = "Nuevo Juego"
+
+[node name="ResetBtn" type="Button" parent="GameContainer/BoardContainer/Controls"]
+layout_mode = 2
+text = "Reiniciar"
+
+[node name="MainMenuBtn" type="Button" parent="GameContainer/BoardContainer/Controls"]
+layout_mode = 2
+text = "Menú Principal"
+
+[node name="Stats" type="HBoxContainer" parent="GameContainer/BoardContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+offset_right = 300.0
+grow_vertical = 0
+
+[node name="Level" type="Label" parent="GameContainer/BoardContainer/Stats"]
+layout_mode = 2
+text = "Nivel: 1"
+
+[node name="Infected" type="Label" parent="GameContainer/BoardContainer/Stats"]
+layout_mode = 2
+text = "Infectadas: 0/36"
+
+[node name="Available" type="Label" parent="GameContainer/BoardContainer/Stats"]
+layout_mode = 2
+text = "Aliens Restantes: 5"
+
+[node name="Reactions" type="Label" parent="GameContainer/BoardContainer/Stats"]
+layout_mode = 2
+text = "Reacciones: 0"
+
+[node name="BoardArea" type="Control" parent="GameContainer/BoardContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = -18.0
+offset_bottom = -153.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AlienList" type="Panel" parent="GameContainer"]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameContainer/AlienList"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ListTitle" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Editor de Niveles"
+
+[node name="EditorControls" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SizeSection" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls"]
+layout_mode = 2
+
+[node name="SizeLabel" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection"]
+layout_mode = 2
+text = "Tamaño del Tablero"
+
+[node name="SizeSelector" type="HBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection"]
+layout_mode = 2
+
+[node name="Size4x4" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection/SizeSelector"]
+layout_mode = 2
+text = "4x4"
+
+[node name="Size5x5" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection/SizeSelector"]
+layout_mode = 2
+text = "5x5"
+
+[node name="Size6x6" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection/SizeSelector"]
+layout_mode = 2
+text = "6x6"
+
+[node name="Size7x7" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection/SizeSelector"]
+layout_mode = 2
+text = "7x7"
+
+[node name="Size8x8" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SizeSection/SizeSelector"]
+layout_mode = 2
+text = "8x8"
+
+[node name="Controls1" type="HBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls"]
+layout_mode = 2
+
+[node name="ClearBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls1"]
+layout_mode = 2
+text = "Limpiar Todo"
+
+[node name="TestBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls1"]
+layout_mode = 2
+text = "Probar Nivel"
+
+[node name="InteractionsBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls1"]
+layout_mode = 2
+text = "📊 Ver Interacciones"
+
+[node name="Controls2" type="HBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls"]
+layout_mode = 2
+
+[node name="SaveBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls2"]
+layout_mode = 2
+text = "Guardar"
+
+[node name="LoadBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls2"]
+layout_mode = 2
+text = "Cargar"
+
+[node name="ListLevelsBtn" type="Button" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/Controls2"]
+layout_mode = 2
+text = "📋 Ver Niveles"
+
+[node name="SettingsSection" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls"]
+layout_mode = 2
+
+[node name="SettingsLabel" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SettingsSection"]
+layout_mode = 2
+text = "⚙️ Configuración"
+
+[node name="AutoApplyToggle" type="CheckBox" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorControls/SettingsSection"]
+layout_mode = 2
+button_pressed = true
+text = "Auto-aplicar reglas"
+
+[node name="AlienGameList" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="EditorPalette" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TerrainSection" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette"]
+layout_mode = 2
+
+[node name="TerrainLabel" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/TerrainSection"]
+layout_mode = 2
+text = "Terrenos"
+
+[node name="TerrainPalette" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/TerrainSection"]
+layout_mode = 2
+
+[node name="AlienSection" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette"]
+layout_mode = 2
+
+[node name="AlienLabel" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/AlienSection"]
+layout_mode = 2
+text = "Aliens"
+
+[node name="AlienPalette" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/AlienSection"]
+layout_mode = 2
+
+[node name="TestSetupSection" type="VBoxContainer" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette"]
+layout_mode = 2
+
+[node name="TestSetupLabel" type="Label" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/TestSetupSection"]
+layout_mode = 2
+text = "Configuración para Test"
+
+[node name="TestSetupSummary" type="RichTextLabel" parent="GameContainer/AlienList/ScrollContainer/VBoxContainer/EditorPalette/TestSetupSection"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=orange]⚠️ No hay aliens configurados para test. Se usará configuración por defecto.[/color]"
+
+[node name="Console" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1901.0
+offset_top = -308.0
+offset_right = -485.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Console"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConsoleContent" type="RichTextLabel" parent="Console/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Consola[/b]"
