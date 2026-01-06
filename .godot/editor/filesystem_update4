@@ -4,3 +4,4 @@ res://scripts/isometric_board.gd
 res://scripts/main_menu.gd
 res://scenes/main_menu.tscn
 res://scripts/board_ui_manager.gd
+res://scripts/terrains.gd

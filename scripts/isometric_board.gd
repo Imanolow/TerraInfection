@@ -13,6 +13,7 @@ var tiles: Dictionary = {}  # Store tile data by position (x, y)
 var hovered_tile = null  # Currently hovered tile position
 var terrains: Dictionary = {}  # Terrain definitions
 var selected_terrain: String = "HIERBA"  # Currently selected terrain
+var lava_timers: Dictionary = {}  # Track lava tiles with timers
 
 func _ready():
 	load_terrains()
@@ -74,6 +75,9 @@ func apply_terrain_to_tile(tile_pos: Vector2, terrain_key: String) -> void:
 	
 	tiles[tile_pos]["terrain"] = terrain_key
 	
+	# Update lava timers before applying new effects
+	update_lava_timers()
+	
 	# Apply terrain effects to adjacent tiles
 	apply_terrain_effects(tile_pos, terrain_key)
 
@@ -104,6 +108,17 @@ func apply_terrain_effects(tile_pos: Vector2, terrain_key: String) -> void:
 			valid_tiles.shuffle()
 			for i in range(min(2, valid_tiles.size())):
 				tiles[valid_tiles[i]]["terrain"] = "ARIDO"
+		
+		"LAGO":
+			# Genera 4 tiles de agua alrededor
+			var water_tiles = []
+			for adj_pos in adjacent:
+				if tiles[adj_pos]["terrain"] == "HIERBA":
+					water_tiles.append(adj_pos)
+			
+			water_tiles.shuffle()
+			for i in range(min(4, water_tiles.size())):
+				tiles[water_tiles[i]]["terrain"] = "AGUA"
 		
 		"GRANJA":
 			# Convierte adyacentes en campos
@@ -140,15 +155,19 @@ func apply_terrain_effects(tile_pos: Vector2, terrain_key: String) -> void:
 					if tiles[pos]["terrain"] == "HIERBA":
 						valid_claro.append(pos)
 				
+				# Si no hay HIERBA, intentar convertir CAMPO o CLARO ya existente
+				if valid_claro.size() == 0:
+					for pos in all_bosque_neighbors:
+						if tiles[pos]["terrain"] != "AGUA" and tiles[pos]["terrain"] != "LAVA" and tiles[pos]["terrain"] != "BOSQUE":
+							valid_claro.append(pos)
+				
 				if valid_claro.size() > 0:
 					valid_claro.shuffle()
 					tiles[valid_claro[0]]["terrain"] = "CLARO"
 		
 		"LAVA":
-			# TODO: Convierte adyacentes en roca tras 3 turnos (necesita timer)
-			for adj_pos in adjacent:
-				if tiles[adj_pos]["terrain"] != "AGUA":
-					tiles[adj_pos]["terrain"] = "ROCA"
+			# Inicia timer de 3 turnos para convertir adyacentes
+			lava_timers[tile_pos] = {"turns": 3, "adjacent": adjacent}
 		
 		"HIELO":
 			# TODO: Se derrite cerca de lava
@@ -192,6 +211,27 @@ func update_hover():
 		if hovered_tile != null:
 			tiles[hovered_tile]["hovered"] = true
 		queue_redraw()
+
+func update_lava_timers() -> void:
+	var timers_to_remove = []
+	
+	for lava_pos in lava_timers.keys():
+		lava_timers[lava_pos]["turns"] -= 1
+		
+		if lava_timers[lava_pos]["turns"] <= 0:
+			# Aplicar efecto de lava después de 3 turnos
+			var adjacent = lava_timers[lava_pos]["adjacent"]
+			for adj_pos in adjacent:
+				if adj_pos in tiles and tiles[adj_pos]["terrain"] not in ["AGUA", "LAVA"]:
+					tiles[adj_pos]["terrain"] = "ROCA"
+			
+			timers_to_remove.append(lava_pos)
+	
+	# Limpiar timers completados
+	for lava_pos in timers_to_remove:
+		lava_timers.erase(lava_pos)
+	
+	queue_redraw()
 
 func is_point_in_tile(point: Vector2, tile_pos: Vector2) -> bool:
 	# Get the world position of the tile
