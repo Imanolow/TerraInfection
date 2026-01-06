@@ -115,7 +115,7 @@ func _on_new_game_pressed():
 
 func _on_editor_pressed():
 	# Switch to the level editor scene
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	get_tree().change_scene_to_file("res://scenes/isometric_board.tscn")
 
 func _on_options_pressed():
 	# TODO: Open options menu (resolution, audio, etc.)

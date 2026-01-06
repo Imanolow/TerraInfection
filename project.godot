@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Terra Infecta - Level Editor"
 config/description="Alien Conquest Level Editor - Migrated from HTML to Godot 4"
-run/main_scene="uid://d3s1gj45q5yq6"
+run/main_scene="uid://b0cqpv3j1xtrf"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
