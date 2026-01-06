@@ -1,7 +1,11 @@
 extends Node2D
 
-const GRID_WIDTH = 5
-const GRID_HEIGHT = 5
+enum BoardSize { SIZE_4x4 = 4, SIZE_5x5 = 5, SIZE_6x6 = 6, SIZE_7x7 = 7, SIZE_8x8 = 8 }
+
+@export var board_size: BoardSize = BoardSize.SIZE_5x5
+
+var grid_width: int
+var grid_height: int
 const TILE_WIDTH = 120.0  # Width of isometric tile
 const TILE_HEIGHT = 60.0  # Height of isometric tile
 
@@ -9,12 +13,19 @@ var tiles: Dictionary = {}  # Store tile data by position (x, y)
 var hovered_tile = null  # Currently hovered tile position
 
 func _ready():
+	update_board_size()
 	generate_board()
 
+func update_board_size():
+	grid_width = int(board_size)
+	grid_height = int(board_size)
+	tiles.clear()
+	hovered_tile = null
+
 func generate_board():
-	# Create a 5x5 grid of isometric tiles
-	for y in range(GRID_HEIGHT):
-		for x in range(GRID_WIDTH):
+	# Create a NxN grid of isometric tiles
+	for y in range(grid_height):
+		for x in range(grid_width):
 			var tile_pos = Vector2(x, y)
 			var world_pos = grid_to_world(x, y)
 			tiles[tile_pos] = {
@@ -32,6 +43,12 @@ func grid_to_world(x: int, y: int) -> Vector2:
 
 func _process(_delta):
 	update_hover()
+
+func set_board_size(new_size: BoardSize) -> void:
+	board_size = new_size
+	update_board_size()
+	generate_board()
+	queue_redraw()
 
 func update_hover():
 	var mouse_pos = get_global_mouse_position()
@@ -72,24 +89,28 @@ func is_point_in_tile(point: Vector2, tile_pos: Vector2) -> bool:
 			is_point_in_triangle(point, tile_center, left, top))
 
 func is_point_in_triangle(p: Vector2, a: Vector2, b: Vector2, c: Vector2) -> bool:
-	var sign = func(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
-		return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
-	
-	var d1 = sign.call(p, a, b)
-	var d2 = sign.call(p, b, c)
-	var d3 = sign.call(p, c, a)
+	var d1 = compute_cross_product(p, a, b)
+	var d2 = compute_cross_product(p, b, c)
+	var d3 = compute_cross_product(p, c, a)
 	
 	var has_neg = (d1 < 0) or (d2 < 0) or (d3 < 0)
 	var has_pos = (d1 > 0) or (d2 > 0) or (d3 > 0)
 	
 	return not (has_neg and has_pos)
 
-func _draw():
-	# Draw all tiles
-	for tile_pos in tiles.keys():
-		draw_tile(tile_pos)
+func compute_cross_product(p1: Vector2, p2: Vector2, p3: Vector2) -> float:
+	return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
 
-func draw_tile(tile_pos: Vector2):
+func _draw():
+	# Draw all tiles (fill and base outline)
+	for tile_pos in tiles.keys():
+		draw_tile_fill(tile_pos)
+	
+	# Draw hovered tile outline on top
+	if hovered_tile != null:
+		draw_tile_outline(hovered_tile, Color.YELLOW, 3.0)
+
+func draw_tile_fill(tile_pos: Vector2):
 	var tile_data = tiles[tile_pos]
 	var world_pos = tile_data["world_pos"]
 	var half_w = TILE_WIDTH * 0.5
@@ -107,15 +128,27 @@ func draw_tile(tile_pos: Vector2):
 	var color = Color.DARK_GRAY
 	draw_colored_polygon(vertices, color)
 	
-	# Draw outline
+	# Draw base outline (white)
 	var outline_color = Color.WHITE
 	var outline_width = 1.0
+	draw_line(top, right, outline_color, outline_width)
+	draw_line(right, bottom, outline_color, outline_width)
+	draw_line(bottom, left, outline_color, outline_width)
+	draw_line(left, top, outline_color, outline_width)
+
+func draw_tile_outline(tile_pos: Vector2, outline_color: Color, outline_width: float):
+	var tile_data = tiles[tile_pos]
+	var world_pos = tile_data["world_pos"]
+	var half_w = TILE_WIDTH * 0.5
+	var half_h = TILE_HEIGHT * 0.5
 	
-	if tile_data["hovered"]:
-		outline_color = Color.YELLOW
-		outline_width = 3.0
+	# Create diamond vertices
+	var top = world_pos + Vector2(0.0, -half_h)
+	var right = world_pos + Vector2(half_w, 0.0)
+	var bottom = world_pos + Vector2(0.0, half_h)
+	var left = world_pos + Vector2(-half_w, 0.0)
 	
-	# Draw edges
+	# Draw outline on top
 	draw_line(top, right, outline_color, outline_width)
 	draw_line(right, bottom, outline_color, outline_width)
 	draw_line(bottom, left, outline_color, outline_width)
